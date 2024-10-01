@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private CharacterAnimation playerAnimation;
-    private Rigidbody rigidbodyPlayer;
+    private Rigidbody rbPlayer;
     private float rotationY = -90f;
     public float walkSpeed = 3f;
     public float zSpeed = 1.5f;
@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        rigidbodyPlayer = this.GetComponent<Rigidbody>();
+        rbPlayer = this.GetComponent<Rigidbody>();
         playerAnimation = GetComponentInChildren<CharacterAnimation>();
     }
 
@@ -29,9 +29,9 @@ public class PlayerMovement : MonoBehaviour
     }
     private void DetectMovement()
     {
-        rigidbodyPlayer.velocity = new Vector3(
+        rbPlayer.velocity = new Vector3(
             Input.GetAxisRaw(Axis.HORIZONTAL_AXIS) * (-walkSpeed),
-            rigidbodyPlayer.velocity.y,
+            rbPlayer.velocity.y,
             Input.GetAxisRaw(Axis.VERTICAL_AXIS) * (-zSpeed));
     }
 
