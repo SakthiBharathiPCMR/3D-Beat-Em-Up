@@ -7,7 +7,7 @@ public class EnemyMovement : MonoBehaviour
     private CharacterAnimation enemyAnimation;
     private Rigidbody rigidbodyEnemy;
     private Transform playerTarget;
-    private float chasePlayerAfterAttack = 1f;
+    private float chasePlayerAfterAttack = 0.5f;
     private float defaultAttackTime = 2f;
     private float currentAttackTime;
     private bool followPlayer, attackPlayer;
@@ -23,5 +23,74 @@ public class EnemyMovement : MonoBehaviour
 
         playerTarget = GameObject.FindWithTag(TagManager.PLAYER_TAG).transform;
     }
+
+
+    private void Start()
+    {
+        followPlayer = true;
+        currentAttackTime = defaultAttackTime;
+    }
+
+    private void FixedUpdate()
+    {
+        FollowTarget();
+    }
+
+    private void Update()
+    {
+        Attack();
+    }
+
+
+    private void FollowTarget()
+    {
+        if (!followPlayer) return;
+
+        if (Vector3.Distance(transform.position, playerTarget.position) > attackDistance)
+        {
+            transform.LookAt(playerTarget);
+            rigidbodyEnemy.velocity = transform.forward;
+            if (rigidbodyEnemy.velocity.sqrMagnitude != 0)
+            {
+                enemyAnimation.Walk(true);
+            }
+        }
+        else if (Vector3.Distance(transform.position, playerTarget.position) <= attackDistance)
+        {
+            rigidbodyEnemy.velocity = Vector3.zero;
+            enemyAnimation.Walk(false);
+
+            followPlayer = false;
+            attackPlayer = true;
+        }
+    }
+
+    private void Attack()
+    {
+        if (!attackPlayer) return;
+
+        currentAttackTime += Time.deltaTime;
+
+        if (currentAttackTime > defaultAttackTime)
+        {
+            enemyAnimation.EnemyAttack(Random.Range(0, 3));
+            currentAttackTime = 0f;
+        }
+
+        if (Vector3.Distance(transform.position, playerTarget.position) > attackDistance + chasePlayerAfterAttack)
+        {
+            attackPlayer = false;
+            followPlayer = true;
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 }
