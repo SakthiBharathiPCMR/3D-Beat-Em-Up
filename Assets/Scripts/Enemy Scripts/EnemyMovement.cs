@@ -7,7 +7,7 @@ public class EnemyMovement : MonoBehaviour
     private CharacterAnimation enemyAnimation;
     private Rigidbody rigidbodyEnemy;
     private Transform playerTarget;
-    private float chasePlayerAfterAttack = 0.5f;
+    public float chasePlayerAfterAttack = 0.5f;
     private float defaultAttackTime = 2f;
     private float currentAttackTime;
     private bool followPlayer, attackPlayer;

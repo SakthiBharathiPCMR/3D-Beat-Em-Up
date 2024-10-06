@@ -17,6 +17,8 @@ public class CharacterAnimationDelegate : MonoBehaviour
     private AudioClip whooshSound, fallSound, groundHitSound, deadSound;
 
     private EnemyMovement enemyMovement;
+
+    private ShakeCamera shakeCamera;
     private void Awake()
     {
         characterAnimation = GetComponent<CharacterAnimation>();
@@ -26,6 +28,8 @@ public class CharacterAnimationDelegate : MonoBehaviour
         {
             enemyMovement = GetComponentInParent<EnemyMovement>();
         }
+
+        shakeCamera = GameObject.FindWithTag(TagManager.MAIN_CAMERA_TAG).GetComponent<ShakeCamera>();
 
     }
 
@@ -130,8 +134,35 @@ public class CharacterAnimationDelegate : MonoBehaviour
     }
 
 
+    private void DisableMovement()
+    {
+        enemyMovement.enabled = false;
+        transform.parent.gameObject.layer = 0;
+    }
+
+    private void EnableMovement()
+    {
+        enemyMovement.enabled = true;
+        transform.parent.gameObject.layer = 7;
+
+    }
 
 
+    private void ShakeCameraOnFall()
+    {
+        shakeCamera.ShouldShake = true;
+    }
+
+    private void CharacterDied()
+    {
+        Invoke("DeactivateGameObject", 2f);
+    }
+
+    private void DeactivateGameObject()
+    {
+        EnemyManager.instance.SpawnEnemy();
+        gameObject.SetActive(false);
+    }
 
 
 
